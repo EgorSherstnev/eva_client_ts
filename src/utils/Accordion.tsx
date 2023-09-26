@@ -2,7 +2,12 @@ import React, {useState} from "react";
 import IconR from "../images/Accordion/icon-right.png";
 import IconD from "../images/Accordion/icon-down.png";
 
-const Accordion = ({title, content}) => {
+interface AccordionProps {
+    title: string,
+    content: string
+}
+
+const Accordion = ({title, content}:AccordionProps) => {
     const [isActive, setIsActive] = useState(false);
 
     return (
