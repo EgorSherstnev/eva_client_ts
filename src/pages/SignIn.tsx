@@ -6,14 +6,15 @@ import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
 import { login } from "../http/userAPI";
 import { setUser, setIsAuth } from '../actions';
+import { AppState } from "../models/IAppState";
 
-const SignIn = (props) => {
+const SignIn = (props: any) => {
     const { user, setUser, setIsAuth } = props;
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const click = async(e) => {
+    const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try {
             let data;
@@ -21,8 +22,8 @@ const SignIn = (props) => {
             setUser(user)
             setIsAuth(true)
             navigate("/")
-        } catch (e) {
-            alert(e.response.data.message)
+        } catch (e: any) {
+            alert(e.response?.data?.message || 'Ошибка входа');
         }
     }
 
@@ -136,7 +137,7 @@ const SignIn = (props) => {
     );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppState) => ({
     user: state.auth.user,
 });
 

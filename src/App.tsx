@@ -29,14 +29,17 @@ function App() {
    });
 
     useEffect(() => {
-        document.querySelector('html').style.scrollBehavior = 'smooth' //плавное прокручивание
-        window.scroll({ top: 0 })
-        document.querySelector('html').style.scrollBehavior = ''
+        const htmlElement = document.querySelector('html');
+        if(htmlElement) {
+            htmlElement.style.scrollBehavior = 'smooth' //плавное прокручивание
+            window.scroll({ top: 0 })
+            htmlElement.style.scrollBehavior = ''
+        }
     }, [location.pathname]); //срабатывает при изменении маршрута
 
     return (
             <Routes>
-                <Route exact path="/" element={<Home />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
