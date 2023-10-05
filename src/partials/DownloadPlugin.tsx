@@ -15,7 +15,7 @@ function DownloadPlugin() {
       a.click();
       window.URL.revokeObjectURL(url);
       setDownloadedFile(url);
-    } catch (e) {
+    } catch (e: any) {
       alert(e.response.data.message);
     }
   };
@@ -30,7 +30,7 @@ function DownloadPlugin() {
       a.click();
       window.URL.revokeObjectURL(url);
       setDownloadedFile(url);
-    } catch (e) {
+    } catch (e: any) {
       alert(e.response.data.message);
     }
   }
@@ -66,10 +66,14 @@ function DownloadPlugin() {
               {/* CTA form */}
               <form className="w-full lg:w-1/2">
                 <button 
-                  onClick={(e) => handleDownloadRevit23(e)} download={'Revit23'}
+                  onClick={handleDownloadRevit23} 
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
                 >
-                  <a className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" href="#0" >
+                  <a 
+                    className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
+                    href="#0" 
+                    download={'Revit23'}
+                  >
                   <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
                      Скачать из облака
                   </a>
@@ -80,10 +84,14 @@ function DownloadPlugin() {
 
               <form className="w-full lg:w-1/2">
                 <button 
-                  onClick={(e) => handleDownloadTest(e)} download={'Revit23'}
+                  onClick={handleDownloadTest} 
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
                 >
-                  <a className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" href="#0" >
+                  <a 
+                    className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
+                    href="#0" 
+                    download={'Revit23'}
+                  >
                   <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
                      Скачать из облака (test)
                   </a>
