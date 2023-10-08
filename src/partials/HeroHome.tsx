@@ -13,7 +13,7 @@ function HeroHome() {
           data-aos="fade-up"
           data-aos-delay="400"
         >
-          <div className="max-w-full brightness-50 " width="564" height="552" viewBox="0 0 564 552" fill="none" >
+          <div className="max-w-full brightness-50 w-564 h-552" >
             <img className="mx-auto opacity-50" src={HHimage}  height="504" alt="Hero" />
           </div>
         </div>
