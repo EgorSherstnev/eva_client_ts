@@ -7,12 +7,13 @@ import LogoIcon from '../images/Logo.svg';
 function Header() {
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-    const trigger = useRef(null);
-    const mobileNav = useRef(null);
+    const mobileNav = useRef<HTMLDivElement | null>(null);
+    const trigger = useRef<HTMLButtonElement | null>(null);
+    
 
   // закрыть мобильное меню при нажатии снаружи
   useEffect(() => {
-    const clickHandler = ({ target }) => {
+    const clickHandler = ({ target }: any) => {
       if (!mobileNav.current || !trigger.current) return;
       if (!mobileNavOpen || mobileNav.current.contains(target) || trigger.current.contains(target)) return;
       setMobileNavOpen(false);
@@ -23,7 +24,7 @@ function Header() {
 
   // закрыть мобильное меню, если нажата клавиша esc
   useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
+    const keyHandler = ({ keyCode }: any) => {
       if (!mobileNavOpen || keyCode !== 27) return;
       setMobileNavOpen(false);
     };
@@ -56,17 +57,17 @@ return (
                             </Link>
                         </li>
                         <li>
-                            <Link className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out" >
+                            <Link to="/" className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out" >
                                 NavItem
                             </Link>
                         </li>
                         <li>
-                            <Link className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out" >
+                            <Link to="/" className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out" >
                                 NavItem
                             </Link>
                         </li>
                         <li>
-                            <Link className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out">
+                            <Link to="/" className="text-gray-300 hover:text-gray-200 px-4 py-2 flex items-center transition duration-150 ease-in-out">
                                 NavItem
                             </Link>
                         </li>
@@ -116,7 +117,12 @@ return (
 
 
                 {/*Mobile navigation */}
-                <nav id="mobile-nav" ref={mobileNav} className="absolute top-full z-20 left-0 w-full px-4 sm:px-6 overflow-hidden transition-all duration-300 ease-in-out" style={mobileNavOpen ? {maxHeight: mobileNav.current.scrollHeight, opacity: 1} : {maxHeight: 0, opacity: .8}}>
+                <nav 
+                    id="mobile-nav" 
+                    ref={mobileNav} 
+                    className="absolute top-full z-20 left-0 w-full px-4 sm:px-6 overflow-hidden transition-all duration-300 ease-in-out" 
+                    style={mobileNavOpen ? {maxHeight: mobileNav.current ? mobileNav.current.scrollHeight : 0, opacity: 1} : {maxHeight: 0, opacity: .8}}
+                >
                     <ul className="bg-gray-800 px-4 py-2">
                         <li>
                             <Link to="/features" className="flex text-gray-300 hover:text-gray-200 py-2">Features</Link>
