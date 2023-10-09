@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const $host = axios.create({
+   baseURL: process.env.REACT_APP_API_URL
+})
+
 const $api = axios.create({
    withCredentials: true,
    baseURL: process.env.REACT_APP_API_URL
@@ -11,7 +15,8 @@ $api.interceptors.request.use((config) => {
 })
 
 export {
-   $api
+   $api,
+   $host
 }
 /*const $host = axios.create({
    baseURL: process.env.REACT_APP_API_URL
