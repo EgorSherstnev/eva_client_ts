@@ -2,10 +2,11 @@ import {
    SET_IS_AUTH,
    SET_USER,
 } from '../actions/types';
+import { IUser } from '../models/IUser';
 
 const initialState = {
    isAuth: false,
-   user: {},
+   user: {} as IUser,
 };
 
 export default function authReducer(state = initialState, action: any) {
