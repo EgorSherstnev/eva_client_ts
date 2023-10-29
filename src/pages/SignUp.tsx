@@ -16,6 +16,11 @@ const SignUp = (props: any) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const formRegistration = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    
+  }
+
   const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     try {
