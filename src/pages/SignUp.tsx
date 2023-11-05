@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
 import { registration } from '../http/userAPI';
-import { setUser, setIsAuth } from '../actions';
+import { setUser, setIsAuth, createUser } from '../actions';
 import { AppState } from '../models/IAppState';
 
 const SignUp = (props: any) => {
   const { user, setUser, setIsAuth } = props;
+  const dispatch = useDispatch()
   const navigate = useNavigate() 
   const [userName, setUserName] = useState('')
   const [company, setCompany] = useState('')
@@ -18,7 +19,21 @@ const SignUp = (props: any) => {
 
   const formRegistration = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    
+    try {
+      console.log('User in form registration: ', userName, company, email, password)
+      await dispatch(createUser({
+        userName: userName,
+        company: company,
+        email: email,
+        password: password,
+      }))
+      //let data = await registration(userName, company, email, password)
+      //setUser(user)
+      //setIsAuth(true)
+      navigate('/')
+    } catch (e: any) {
+      alert(e.response?.data?.message || 'Ошибка регистрации');
+    }
   }
 
   const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -140,7 +155,7 @@ const SignUp = (props: any) => {
                     <div className="w-full px-3">
                       <button 
                         className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
-                        onClick={click}
+                        onClick={formRegistration}
                       >
                         Зарегистрироваться
                       </button>

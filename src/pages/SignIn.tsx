@@ -1,18 +1,32 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
 import { login } from "../http/userAPI";
-import { setUser, setIsAuth } from '../actions';
+import { setUser, setIsAuth, loginUser } from '../actions';
 import { AppState } from "../models/IAppState";
 
 const SignIn = (props: any) => {
     const { user, setUser, setIsAuth } = props;
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const formLogin = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        try {
+            console.log('User in form login: ', email, password)
+            await dispatch(loginUser({
+                email: email,
+                password: password,
+            }))
+        } catch (e: any) {
+            alert(e.response?.data?.message || 'Ошибка авторизации');
+        }
+    }
 
     const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -114,7 +128,7 @@ const SignIn = (props: any) => {
                                         <div className="w-full px-3">
                                             <button 
                                                 className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
-                                                onClick={click}
+                                                onClick={formLogin}
                                             >
                                                 Войти
                                             </button>
