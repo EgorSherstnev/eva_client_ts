@@ -4,3 +4,4 @@ export const SET_USER: string = 'SET_USER';
 export const USER_REGISTRATION: string = 'USER_REGISTRATION';
 export const USER_LOGIN: string = 'USER_LOGIN';
 export const USER_LOGOUT: string = 'USER_LOGOUT';
+export const USER_CHECK_AUTH: string = 'USER_CHECK_AUTH';

@@ -23,6 +23,7 @@ const SignIn = (props: any) => {
                 email: email,
                 password: password,
             }))
+            navigate("/")
         } catch (e: any) {
             alert(e.response?.data?.message || 'Ошибка авторизации');
         }

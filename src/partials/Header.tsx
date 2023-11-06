@@ -2,9 +2,16 @@ import React, { useState, useRef, useEffect }  from "react";
 import { Link } from 'react-router-dom';
 import Dropdown from '../utils/Dropdown';
 
-import LogoIcon from '../images/Logo.svg';
+import { AppState } from '../models/IAppState';
 
-function Header() {
+import LogoIcon from '../images/Logo.svg';
+import { connect, useSelector } from "react-redux";
+import { RootState } from "../store";
+
+function Header (props: any) {
+    const { user, isAuth } = props;
+    //const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+    //const userAuth = useSelector((state: RootState) => state.auth.user.email)
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     const mobileNav = useRef<HTMLDivElement | null>(null);
@@ -88,6 +95,9 @@ return (
 
                    {/* Desktop sign in links */}
                    <ul className="flex grow justify-end flex-wrap items-center">
+                        <li className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
+                            {isAuth ? `Пользователь авторизован ${user.email}` : 'Авторизуйтесь'}
+                        </li>
                         <li>
                             <Link to="/signin" className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
                                 Войти
@@ -168,4 +178,10 @@ return (
 );
 }
 
-export default Header;
+const mapStateToProps = (state: AppState) => ({
+    user: state.auth.user,
+    isAuth: state.auth.isAuth,
+  });
+  
+
+export default connect(mapStateToProps)(Header);

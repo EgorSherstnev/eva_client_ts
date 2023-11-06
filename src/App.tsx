@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useContext, useEffect} from "react";
 import { 
    Routes,
    Route,
@@ -14,10 +14,25 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ResetPassword from "./pages/ResetPassword";
+import { useDispatch } from "react-redux";
+import { checkAuthUser } from "./actions";
 
 function App() {
 
    const location = useLocation();
+
+   const dispatch = useDispatch()
+
+   useEffect(() => {
+    const checkUserAuth = async () => {
+        if (localStorage.getItem('token')) {
+            await dispatch(checkAuthUser())
+        }
+    }
+
+    checkUserAuth();
+
+   }, [])
 
    useEffect(() => {
       Aos.init({

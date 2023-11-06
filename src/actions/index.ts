@@ -2,6 +2,7 @@ import { IUserLogin, IUserRegistration } from "../models/IUser";
 import {
    SET_IS_AUTH,
    SET_USER,
+   USER_CHECK_AUTH,
    USER_LOGIN,
    USER_LOGOUT,
    USER_REGISTRATION
@@ -31,4 +32,8 @@ export const loginUser = (user:IUserLogin) => ({
 
 export const logoutUser = () => ({
    type: USER_LOGOUT
+})
+
+export const checkAuthUser = () => ({
+   type: USER_CHECK_AUTH
 })
