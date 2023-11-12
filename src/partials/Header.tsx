@@ -5,13 +5,16 @@ import Dropdown from '../utils/Dropdown';
 import { AppState } from '../models/IAppState';
 
 import LogoIcon from '../images/Logo.svg';
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
+import { logoutUser } from "../actions";
 
 function Header (props: any) {
     const { user, isAuth } = props;
     //const isAuth = useSelector((state: RootState) => state.auth.isAuth);
     //const userAuth = useSelector((state: RootState) => state.auth.user.email)
+    const dispatch = useDispatch()
+
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     const mobileNav = useRef<HTMLDivElement | null>(null);
@@ -39,6 +42,14 @@ function Header (props: any) {
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
+  const userLogout = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    try {
+        await dispatch(logoutUser())
+    } catch (e: any) {
+        alert(e.response?.data?.message || 'Ошибка выхода');
+    }
+  }
 
 return (
     <header className="absolute w-full z-30">
@@ -97,6 +108,14 @@ return (
                    <ul className="flex grow justify-end flex-wrap items-center">
                         <li className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
                             {isAuth ? `Пользователь авторизован ${user.email}` : 'Авторизуйтесь'}
+                        </li>
+                        <li>
+                            <button 
+                                className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out"
+                                onClick={userLogout}
+                            >
+                                Выйти
+                            </button>
                         </li>
                         <li>
                             <Link to="/signin" className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
