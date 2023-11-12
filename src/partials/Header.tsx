@@ -109,6 +109,9 @@ return (
                         <li className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
                             {isAuth ? `Пользователь авторизован ${user.email}` : 'Авторизуйтесь'}
                         </li>
+                        <li className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
+                            {user.isActivated ? `Аккаунт подтвержден по почте ${user.email}` : 'Подтвердите аккаунт'}
+                        </li>
                         <li>
                             <button 
                                 className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out"
