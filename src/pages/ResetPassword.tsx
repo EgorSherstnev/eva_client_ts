@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
 import Banner from '../partials/Banner';
+import { resetPassword } from '../http/userAPI';
 
 function ResetPassword() {
+  const [email, setEmail] = useState('')
+
+  const formResetPassword = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    try {
+      let data = await resetPassword(email)
+      alert(data)
+    } catch (e: any) {
+      alert(e.response?.data?.message || 'Ошибка сброса пароля');
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
 
@@ -36,12 +49,25 @@ function ResetPassword() {
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="email">Email</label>
-                      <input id="email" type="email" className="form-input w-full text-gray-300" placeholder="you@yourcompany.com" required />
+                      <input 
+                        id="email" 
+                        type="email" 
+                        className="form-input w-full text-gray-300" 
+                        placeholder="you@yourcompany.com" 
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        required 
+                      />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mt-6">
                     <div className="w-full px-3">
-                      <button className="btn text-white bg-purple-600 hover:bg-purple-700 w-full">Сбросить пароль</button>
+                      <button 
+                        className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
+                        onClick={formResetPassword}
+                      >
+                        Сбросить пароль
+                      </button>
                     </div>
                   </div>
                 </form>

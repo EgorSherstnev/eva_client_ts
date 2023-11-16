@@ -16,6 +16,7 @@ import SignUp from "./pages/SignUp";
 import ResetPassword from "./pages/ResetPassword";
 import { useDispatch } from "react-redux";
 import { checkAuthUser } from "./actions";
+import UpdatePassword from "./pages/UpdatePassword";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/update-password/:link" element={< UpdatePassword />}/>
             </Routes>
     );   
 }
