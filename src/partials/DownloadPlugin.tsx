@@ -3,22 +3,39 @@ import DownloadIcon from "../images/downloadplugin/downloadicon.svg";
 import { downloadRevit23, downloadTest } from "../http/downloadAPI";
 
 function DownloadPlugin() {
+
   const [downloadedFile, setDownloadedFile] = useState('');
 
-  const handleDownload = async (downloadFunction: () => Promise<Blob>, fileName: string) => {
+  const handleDownloadRevit23 = async () => {
     try {
-      const response = await downloadFunction();
+      const response = await downloadRevit23();
       const url = window.URL.createObjectURL(new Blob([response]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = fileName;
+      a.download = "EVARevit23.zip";
       a.click();
       window.URL.revokeObjectURL(url);
       setDownloadedFile(url);
     } catch (e: any) {
-      alert(e.response?.data?.message || "An error occurred");
+      alert(e.response.data.message);
     }
   };
+
+
+  const handleDownloadTest = async () => {
+    try {
+      const response = await downloadTest();
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Test.txt";
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setDownloadedFile(url);
+    } catch (e: any) {
+      alert(e.response.data.message);
+    }
+  }
 
    return (
       <section>
@@ -50,36 +67,35 @@ function DownloadPlugin() {
 
               {/* CTA form */}
               <form className="w-full lg:w-1/2">
-                <button
-                  onClick={() => handleDownload(downloadRevit23, 'EVARevit23.zip')}
+                <a
+                  onClick={handleDownloadRevit23}
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
+                  href="#0" 
+
                 >
-                  <a 
+                  <div 
                     className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
-                    href="#0" 
-                    download={'Revit23'}
+
                   >
                   <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
                      Скачать из облака
-                  </a>
-                </button>
+                  </div>
+                </a>
                 {/* Success message */}
                 {/* <p className="text-center lg:text-left lg:absolute mt-2 opacity-75 text-sm">Thanks for subscribing!</p> */}
               </form>
 
               <form className="w-full lg:w-1/2">
                 <button
-                  onClick={() => handleDownload(downloadTest, 'Test.txt')}
+                  onClick={handleDownloadTest} 
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
                 >
-                  <a 
+                  <div 
                     className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
-                    href="#0" 
-                    download={'Revit23'}
                   >
                   <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
                      Скачать из облака (test)
-                  </a>
+                  </div>
                 </button>
                 {/* Success message */}
                 {/* <p className="text-center lg:text-left lg:absolute mt-2 opacity-75 text-sm">Thanks for subscribing!</p> */}
