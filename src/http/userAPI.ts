@@ -21,7 +21,12 @@ export const check = async () => {
 
 export const resetPassword = async ( email: string ) => {
    const {data} = await $api.post('api/user/reset-password', {email})
-   return (data.message)
+   return (data)
+}
+
+export const updatePassword = async ( password: string, activationLink: string) => {
+   const { data } = await $api.post('api/user/update-password', {password, activationLink});
+   return(data);
 }
 
 // export const registration = async (userName, company, email, password) => {

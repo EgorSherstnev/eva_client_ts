@@ -13,7 +13,7 @@ function ResetPassword() {
     e.preventDefault();
     try {
       let data = await resetPassword(email)
-      alert(data)
+      alert(data.message)
     } catch (e: any) {
       alert(e.response?.data?.message || 'Ошибка сброса пароля');
     }

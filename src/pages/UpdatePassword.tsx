@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { connect, useDispatch } from 'react-redux';
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
-import { login } from "../http/userAPI";
-import { setUser, setIsAuth, loginUser } from '../actions';
-import { AppState } from "../models/IAppState";
+import { updatePassword } from "../http/userAPI";
 
 const UpdatePassword = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('')
+    const {activationLink} = useParams();
+    const [passwordRepeat, setPasswordRepeat] = useState('')
     const [password, setPassword] = useState('')
 
     const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try {
             let data;
-            data = await login(email, password)
-            navigate("/signin")
+            if(activationLink) {
+                (password == passwordRepeat) ? data = await updatePassword(password, activationLink) : alert ('Пароли в полях ввода не совпадают')
+            }
+            alert(data.message)
+            setTimeout(() => navigate("/signin"), 2000)
+            
         } catch (e: any) {
-            alert(e.response?.data?.message || 'Ошибка входа');
+            alert(e.response?.data?.message || 'Ошибка смены пароля');
         }
     }
 
@@ -49,42 +51,16 @@ const UpdatePassword = () => {
 
                             {/* Form */}
                             <div className="max-w-sm mx-auto">
-                                <form>
-                                    <div className="flex flex-wrap -mx-3">
-                                        <div className="w-full px-3">
-                                            <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center">
-                                                <svg className="w-4 h-4 fill-current text-white opacity-75 shrink-0 mx-4" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M7.9 7v2.4H12c-.2 1-1.2 3-4 3-2.4 0-4.3-2-4.3-4.4 0-2.4 2-4.4 4.3-4.4 1.4 0 2.3.6 2.8 1.1l1.9-1.8C11.5 1.7 9.9 1 8 1 4.1 1 1 4.1 1 8s3.1 7 7 7c4 0 6.7-2.8 6.7-6.8 0-.5 0-.8-.1-1.2H7.9z" />
-                                                </svg>
-                                                <span className="h-6 flex items-center border-r border-white border-opacity-25 mr-4" aria-hidden="true"></span>
-                                                <span className="flex-auto pl-16 pr-8 -ml-16">Войти с помощью Google</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                
                                 <div className="flex items-center my-6">
                                     <div className="border-t border-gray-700 border-dotted grow mr-3" aria-hidden="true"></div>
-                                    <div className="text-gray-400">Или войдите с помощью Вашего email</div>
+                                    <div className="text-gray-400">Введите новый пароль для смены</div>
                                     <div className="border-t border-gray-700 border-dotted grow ml-3" aria-hidden="true"></div>
                                 </div>
                                 <form>
                                     <div className="flex flex-wrap -mx-3 mb-4">
                                         <div className="w-full px-3">
-                                            <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="email">Email</label>
-                                            <input 
-                                                id="email" 
-                                                type="email" 
-                                                className="form-input w-full text-gray-300" 
-                                                placeholder="you@yourcompany.com" 
-                                                value={email}
-                                                onChange={e => setEmail(e.target.value)}
-                                                required 
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap -mx-3 mb-4">
-                                        <div className="w-full px-3">
-                                            <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="password">Password</label>
+                                            <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="email">Password</label>
                                             <input 
                                                 id="password" 
                                                 type="password" 
@@ -98,13 +74,16 @@ const UpdatePassword = () => {
                                     </div>
                                     <div className="flex flex-wrap -mx-3 mb-4">
                                         <div className="w-full px-3">
-                                            <div className="flex justify-between">
-                                                <label className="flex items-center">
-                                                    <input type="checkbox" className="form-checkbox" />
-                                                    <span className="text-gray-400 ml-2">Запомнить меня</span>
-                                                </label>
-                                                <Link to="/reset-password" className="text-purple-600 hover:text-gray-200 transition duration-150 ease-in-out">Забыли пароль?</Link>
-                                            </div>
+                                            <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="password">Password(repeat)</label>
+                                            <input 
+                                                id="password" 
+                                                type="password" 
+                                                className="form-input w-full text-gray-300" 
+                                                placeholder="Пароль (не менее 10 символов)" 
+                                                value={passwordRepeat}
+                                                onChange={e => setPasswordRepeat(e.target.value)}
+                                                required 
+                                            />
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap -mx-3 mt-6">
@@ -113,14 +92,11 @@ const UpdatePassword = () => {
                                                 className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
                                                 onClick={click}
                                             >
-                                                Войти
+                                                Обновить пароль
                                             </button>
                                         </div>
                                     </div>
                                 </form>
-                                <div className="text-gray-400 text-center mt-6">
-                                    Нет учётной записи? <Link to="/signup" className="text-purple-600 hover:text-gray-200 transition duration-150 ease-in-out">Зарегистрируйтесь!</Link>
-                                </div>
                             </div>
 
                         </div>
