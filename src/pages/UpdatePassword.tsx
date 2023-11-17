@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
@@ -7,22 +7,23 @@ import { updatePassword } from "../http/userAPI";
 
 const UpdatePassword = () => {
     const navigate = useNavigate();
-    const {activationLink} = useParams();
+    const { activationLink } = useParams<{ activationLink?: string }>();
     const [passwordRepeat, setPasswordRepeat] = useState('')
     const [password, setPassword] = useState('')
 
     const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try {
-            let data;
-            if(activationLink) {
-                (password == passwordRepeat) ? data = await updatePassword(password, activationLink) : alert ('Пароли в полях ввода не совпадают')
+            if (password === passwordRepeat) {
+                const data = await updatePassword(password, activationLink!);
+                alert(data.message);
+                setTimeout(() => navigate("/signin"), 2000);
+            } else {
+                alert('Пароли в полях ввода не совпадают');
             }
-            alert(data.message)
-            setTimeout(() => navigate("/signin"), 2000)
-            
-        } catch (e: any) {
-            alert(e.response?.data?.message || 'Ошибка смены пароля');
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.message || 'Ошибка смены пароля';
+            alert(errorMessage);
         }
     }
 
@@ -76,7 +77,7 @@ const UpdatePassword = () => {
                                         <div className="w-full px-3">
                                             <label className="block text-gray-300 text-sm font-medium mb-1" htmlFor="password">Password(repeat)</label>
                                             <input 
-                                                id="password" 
+                                                id="passwordRepeat" 
                                                 type="password" 
                                                 className="form-input w-full text-gray-300" 
                                                 placeholder="Пароль (не менее 10 символов)" 

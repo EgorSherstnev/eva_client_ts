@@ -5,35 +5,20 @@ import { downloadRevit23, downloadTest } from "../http/downloadAPI";
 function DownloadPlugin() {
   const [downloadedFile, setDownloadedFile] = useState('');
 
-  const handleDownloadRevit23 = async () => {
+  const handleDownload = async (downloadFunction: () => Promise<Blob>, fileName: string) => {
     try {
-      const response = await downloadRevit23();
+      const response = await downloadFunction();
       const url = window.URL.createObjectURL(new Blob([response]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = "EVARevit23.zip";
+      a.download = fileName;
       a.click();
       window.URL.revokeObjectURL(url);
       setDownloadedFile(url);
     } catch (e: any) {
-      alert(e.response.data.message);
+      alert(e.response?.data?.message || "An error occurred");
     }
   };
-
-  const handleDownloadTest = async () => {
-    try {
-      const response = await downloadTest();
-      const url = window.URL.createObjectURL(new Blob([response]));
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Test.txt";
-      a.click();
-      window.URL.revokeObjectURL(url);
-      setDownloadedFile(url);
-    } catch (e: any) {
-      alert(e.response.data.message);
-    }
-  }
 
    return (
       <section>
@@ -65,8 +50,8 @@ function DownloadPlugin() {
 
               {/* CTA form */}
               <form className="w-full lg:w-1/2">
-                <button 
-                  onClick={handleDownloadRevit23} 
+                <button
+                  onClick={() => handleDownload(downloadRevit23, 'EVARevit23.zip')}
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
                 >
                   <a 
@@ -83,8 +68,8 @@ function DownloadPlugin() {
               </form>
 
               <form className="w-full lg:w-1/2">
-                <button 
-                  onClick={handleDownloadTest} 
+                <button
+                  onClick={() => handleDownload(downloadTest, 'Test.txt')}
                   className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
                 >
                   <a 
