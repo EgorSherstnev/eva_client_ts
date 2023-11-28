@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DownloadIcon from "../images/downloadplugin/downloadicon.svg";
-import { downloadRevit23, downloadTest } from "../http/downloadAPI";
+import { downloadFilesEva, downloadRevit23, downloadTest } from "../http/downloadAPI";
+import UIDownloadCard from "../ui/DownloadCard";
 
 function DownloadPlugin() {
 
@@ -20,6 +21,21 @@ function DownloadPlugin() {
       alert(e.response.data.message);
     }
   };
+
+  const handleDownloadEva = async(fileName: string, routeName: string) => {
+    try {
+      const response = await downloadFilesEva(routeName);
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setDownloadedFile(url);
+    } catch (e: any) {
+      alert(e.response.data.message);
+    }
+  }
 
 
   const handleDownloadTest = async () => {
@@ -42,7 +58,7 @@ function DownloadPlugin() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
           {/* CTA box */}
-          <div className="relative bg-purple-600 py-10 px-8 md:py-16 md:px-12" data-aos="fade-up">
+          <div className="relative bg-purple-600 py-5 px-3 md:py-16 md:px-12" data-aos="fade-up">
 
             {/* Background illustration */}
             <div className="absolute right-0 top-0 -ml-40 pointer-events-none" aria-hidden="true">
@@ -57,7 +73,7 @@ function DownloadPlugin() {
               </svg>
             </div>
 
-            <div className="relative flex flex-col lg:flex-row justify-between items-center">
+            <div className="relative flex-col lg:flex-row justify-between items-center">
 
               {/* CTA content */}
               <div className="mb-6 lg:mr-16 lg:mb-0 text-center lg:text-left lg:w-1/2">
@@ -66,40 +82,54 @@ function DownloadPlugin() {
               </div>
 
               {/* CTA form */}
-              <form className="w-full lg:w-1/2">
-                <a
-                  onClick={handleDownloadRevit23}
-                  className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
-                  href="#0" 
+              <div className=" flex flex-wrap mb-2" >
+                <UIDownloadCard 
+                  fileName="eva_automatic_inst.zip" 
+                  routeName='eva_automatic_inst' 
+                  textCard = 'Плагин EVA (Revit + Excel) автом. установка (v.2.9.0.5)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                <UIDownloadCard 
+                  fileName="evarev_manual_inst.zip" 
+                  routeName='evarev_manual_inst' 
+                  textCard = 'Плагин EVA (Revit 2020-2023) установка вручную (v.2.9.0.5)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                <UIDownloadCard 
+                  fileName="evaex_manual_inst.zip" 
+                  routeName='evaex_manual_inst' 
+                  textCard = 'Плагин EVA (Excel) установка вручную (v.2.9.0.5)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                <UIDownloadCard 
+                  fileName="eva_excel.zip" 
+                  routeName='eva_excel' 
+                  textCard = 'Файлы EVAex (Excel) (v.2.9.0.6)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                
 
-                >
-                  <div 
-                    className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
+                <UIDownloadCard 
+                  fileName="pattern_adsk_eva.zip" 
+                  routeName='pattern_adsk_eva' 
+                  textCard = 'Шаблон ADSK EVAex (v.2.9.0.2)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                <UIDownloadCard 
+                  fileName="family_for_update.zip" 
+                  routeName='family_for_update' 
+                  textCard = 'Семейства для обновления (v.2.9.0.2)' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+                <UIDownloadCard 
+                  fileName="sml_eva.zip" 
+                  routeName='sml_eva' 
+                  textCard = 'SML_EVA Дата обновления: 24.11.2023' 
+                  handleDownloadEva={handleDownloadEva}
+                />
+              </div>
 
-                  >
-                  <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
-                     Скачать из облака
-                  </div>
-                </a>
-                {/* Success message */}
-                {/* <p className="text-center lg:text-left lg:absolute mt-2 opacity-75 text-sm">Thanks for subscribing!</p> */}
-              </form>
-
-              <form className="w-full lg:w-1/2">
-                <button
-                  onClick={handleDownloadTest} 
-                  className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none"
-                >
-                  <div 
-                    className="btn text-purple-600 bg-purple-100 hover:bg-white shadow" 
-                  >
-                  <img className=" mx-2 " src={DownloadIcon} width="32" height="32"  alt="DownloadIcon" />
-                     Скачать из облака (test)
-                  </div>
-                </button>
-                {/* Success message */}
-                {/* <p className="text-center lg:text-left lg:absolute mt-2 opacity-75 text-sm">Thanks for subscribing!</p> */}
-              </form>
+              
 
             </div>
 

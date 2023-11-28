@@ -83,11 +83,10 @@ function Footer() {
                             </div>
                         </div>
                     </div>
-
+                    <div className='flex justify-center items-center text-gray-200 font-medium mb-3'>WEB платформа разработана E&A Шерстнёвыми</div>
                 </div>
-
+                
             </div>
-
         </footer>
     )
 }
