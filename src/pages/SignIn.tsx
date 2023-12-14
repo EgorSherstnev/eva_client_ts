@@ -1,46 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { connect, useDispatch } from 'react-redux';
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
-import { login } from "../http/userAPI";
-import { setUser, setIsAuth, loginUser } from '../actions';
+import { loginUser } from '../actions';
 import { AppState } from "../models/IAppState";
+import { LOGIN_ERROR } from "../actions/types";
 
-const SignIn = (props: any) => {
-    const { user, setUser, setIsAuth } = props;
-    const dispatch = useDispatch()
+const SignIn = ({ authError }: { authError: string }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const formLogin = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try {
-            console.log('User in form login: ', email, password)
-            await dispatch(loginUser({
+            console.log('User in form login: ', email, password);
+            const response = await dispatch(loginUser({
                 email: email,
                 password: password,
-            }))
-            navigate("/")
-        } catch (e: any) {
-            alert(e.response?.data?.message || 'Ошибка авторизации');
+            }));
+            console.log('Login successful', response);
+            // navigate("/")
+        } catch (error:any) {
+            console.error("Error in handleLogin:", error);
+    
+            if (error.response && error.response.status === 404) {
+                // Обрабатываем ошибку 404 (пользователь не найден)
+                alert('User not found');
+            } else {
+                // Обработка других ошибок
+                throw error;
+            }
         }
-    }
+    };
+    
 
-    const click = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-        try {
-            let data;
-            data = await login(email, password)
-            setUser(user)
-            setIsAuth(true)
-            navigate("/")
-        } catch (e: any) {
-            alert(e.response?.data?.message || 'Ошибка входа');
-        }
-    }
+    useEffect(() => {
+            // Cleanup function on component unmount
+        return () => {
+            dispatch({ type: LOGIN_ERROR, payload: null });
+        };
+    }, [dispatch]);
+
+    useEffect(() => {
+        //console.log('Auth error from redux state:', authError);
+        // if (authError) {
+        //     console.log(authError);
+        //     alert(authError);
+        // }
+    }, [authError]);
+      
+    
 
     return (
         <div className="flex flex-col min-h-screen overflow-hidden">
@@ -52,7 +65,7 @@ const SignIn = (props: any) => {
 
                 {/* Page illustration */}
                 <div className="relative max-w-6xl mx-auto h-0 pointer-events-none" aria-hidden="true">
-                     <PageIllustration />
+                    <PageIllustration />
                 </div>
 
 
@@ -121,7 +134,7 @@ const SignIn = (props: any) => {
                                                     <input type="checkbox" className="form-checkbox" />
                                                     <span className="text-gray-400 ml-2">Запомнить меня</span>
                                                 </label>
-                                                <Link to="/reset-password" className="text-purple-600 hover:text-gray-200 transition duration-150 ease-in-out">Забыли пароль?</Link>
+                                                <Link to="/reset-password" aria-label="Сброс пароля" className="text-purple-600 hover:text-gray-200 transition duration-150 ease-in-out">Забыли пароль?</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +142,7 @@ const SignIn = (props: any) => {
                                         <div className="w-full px-3">
                                             <button 
                                                 className="btn text-white bg-purple-600 hover:bg-purple-700 w-full"
-                                                onClick={formLogin}
+                                                onClick={handleLogin}
                                             >
                                                 Войти
                                             </button>
@@ -153,12 +166,7 @@ const SignIn = (props: any) => {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    user: state.auth.user,
+    authError: state.auth.error,
 });
 
-const mapDispatchToProps = {
-    setUser,
-    setIsAuth,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps)(SignIn);

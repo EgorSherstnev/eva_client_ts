@@ -112,23 +112,27 @@ return (
                         <li className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
                             {user.isActivated ? `Аккаунт подтвержден по почте ${user.email}` : 'Подтвердите аккаунт'}
                         </li>
+                        
                         <li>
-                            <button 
-                                className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out"
-                                onClick={userLogout}
-                            >
-                                Выйти
-                            </button>
-                        </li>
-                        <li>
-                            <Link to="/signin" className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
-                                Войти
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/signup" className="btn-sm text-white bg-purple-600 hover:bg-purple-700 ml-3" >
-                                Зарегистрироваться
-                            </Link>
+                            {isAuth? 
+                                <button 
+                                    className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out"
+                                    onClick={userLogout}
+                                >
+                                    Выйти
+                                </button>
+                                :
+                                <div className="flex">                                
+                                    <Link to="/signin" className="font-medium text-purple-600 hover:text-gray-200 px-4 py-3 flex items-center transition duration-150 ease-in-out">
+                                        Войти
+                                    </Link>
+                                    <Link to="/signup" className="btn-sm text-white bg-purple-600 hover:bg-purple-700 ml-3" >
+                                        Зарегистрироваться
+                                    </Link>
+                                </div>
+
+                            
+                            }
                         </li>
                    </ul>
 

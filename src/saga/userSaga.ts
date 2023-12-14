@@ -3,7 +3,7 @@ import {
    takeEvery,
    call
 } from "redux-saga/effects"
-import { setIsAuth, setUser } from "../actions";
+import { loginError, setIsAuth, setUser } from "../actions";
 import { IAction } from "../models/IAction";
 import { IUser, IUserLogin, IUserRegistration } from "../models/IUser";
 import { USER_CHECK_AUTH, USER_LOGIN, USER_LOGOUT, USER_REGISTRATION } from "../actions/types";
@@ -36,8 +36,11 @@ function* loginUserWorker(action: IAction): Generator<any, void, any> {
       localStorage.setItem('token', response.data.accessToken)
       yield put(setIsAuth(true));
       yield put(setUser(response.data.user));
+      return response;
    } catch (error: any) {
       console.error("Error when login a user:", error.response?.data?.message)
+      yield put(loginError(error.response?.data?.message));
+      throw error;
    }
 }
 

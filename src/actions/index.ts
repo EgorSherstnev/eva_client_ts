@@ -1,5 +1,7 @@
 import { IUserLogin, IUserRegistration } from "../models/IUser";
 import {
+   LOGIN_ERROR,
+   REGISTRATION_ERROR,
    SET_IS_AUTH,
    SET_USER,
    USER_CHECK_AUTH,
@@ -36,4 +38,16 @@ export const logoutUser = () => ({
 
 export const checkAuthUser = () => ({
    type: USER_CHECK_AUTH
+})
+
+/*--------ERRORS-------------*/
+
+export const loginError = (errorMessage: string) => ({
+   type:LOGIN_ERROR,
+   payload: errorMessage,
+})
+
+export const registrationError = (errorMessage: string) => ({
+   type:REGISTRATION_ERROR,
+   payload: errorMessage,
 })

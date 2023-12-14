@@ -11,7 +11,10 @@ const rootReducer = combineReducers({
    form: formReducer,
 });
 
-export const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+export const store = createStore(
+   rootReducer, 
+   applyMiddleware(sagaMiddleware)
+)
 
 export type RootState = ReturnType<typeof rootReducer>;
 
