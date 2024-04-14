@@ -1,7 +1,9 @@
 import {
    put,
    takeEvery,
-   call
+   call,
+   fork,
+   spawn
 } from "redux-saga/effects"
 import { loginError, setIsAuth, setUser } from "../actions";
 import { IAction } from "../models/IAction";
@@ -10,6 +12,10 @@ import { USER_CHECK_AUTH, USER_LOGIN, USER_LOGOUT, USER_REGISTRATION } from "../
 import AuthService from "../services/AuthService";
 import axios, { AxiosResponse } from "axios";
 import { AuthResponse } from "../models/response/AuthResponse";
+
+function* onErrorSaga(error: any) {
+   console.error("Error in saga:", error);
+}
 
 function* addNewUserWorker(action: IAction): Generator<any, void, any> {
    try {
@@ -36,11 +42,13 @@ function* loginUserWorker(action: IAction): Generator<any, void, any> {
       localStorage.setItem('token', response.data.accessToken)
       yield put(setIsAuth(true));
       yield put(setUser(response.data.user));
-      return response;
+      //return response;
    } catch (error: any) {
       console.error("Error when login a user:", error.response?.data?.message)
       yield put(loginError(error.response?.data?.message));
+      console.log('Error object:', error);
       throw error;
+      //return Promise.reject(error);
    }
 }
 
@@ -67,18 +75,27 @@ function* checkAuthWorker() {
    }
 }
 
+// Функция-обертка для spawn, чтобы отлавливать ошибки
+function* safeCall(fn: Function, ...args: any[]) {
+   try {
+     yield fn(...args); // Запускаем оригинальную сагу
+   } catch (error) {
+     yield call(onErrorSaga, error); // Запускаем обработчик ошибок
+   }
+ }
+
 export function* addNewUserWatcher() {
-   yield takeEvery(USER_REGISTRATION, addNewUserWorker)
+   yield takeEvery(USER_REGISTRATION, safeCall, addNewUserWorker)
 }
 
 export function* loginUserWatcher() {
-   yield takeEvery(USER_LOGIN, loginUserWorker)
+   yield takeEvery(USER_LOGIN, safeCall, loginUserWorker)
 }
 
 export function* logoutUserWatcher() {
-   yield takeEvery(USER_LOGOUT, logoutUserWorker)
+   yield takeEvery(USER_LOGOUT, safeCall, logoutUserWorker)
 }
 
 export function* checkAuthWatcher() {
-   yield takeEvery(USER_CHECK_AUTH, checkAuthWorker)
+   yield takeEvery(USER_CHECK_AUTH, safeCall, checkAuthWorker)
 }

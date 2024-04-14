@@ -26,35 +26,35 @@ function OurPartners() {
 
                      {/* 1st item */}
                      <div className="relative items-center w-32" data-aos="fade-up" data-aos-anchor="[data-aos-id-blocks]">
-                        <a href="https://www.google.ru/">
+                        <a href="https://www.iek.ru/">
                            <img className=" mb-2"  src={LogoIEK} alt="Partner1" />
                         </a>
                      </div>
 
                      {/* 2st item */}
                      <div className="relative items-center w-32" data-aos="fade-up" data-aos-anchor="[data-aos-id-blocks]">
-                        <a href="https://www.google.ru/">
+                        <a href="https://www.iek.ru/">
                            <img className=" mb-2" src={LogoIEK} alt="Partner2" />
                         </a>
                      </div>
 
                      {/* 3st item */}
                      <div className="relative items-center w-32" data-aos="fade-up" data-aos-anchor="[data-aos-id-blocks]">
-                        <a href="https://www.google.ru/">
+                        <a href="https://www.iek.ru/">
                            <img className=" mb-2" src={LogoIEK} alt="Partner3" />
                         </a>
                      </div>
 
                      {/* 4st item */}
                      <div className="relative items-center w-32" data-aos="fade-up" data-aos-anchor="[data-aos-id-blocks]">
-                        <a href="https://www.google.ru/">
+                        <a href="https://www.iek.ru/">
                            <img className=" mb-2" src={LogoIEK} alt="Partner4" />
                         </a>
                      </div>
 
                      {/* 5st item */}
                      <div className="relative items-center w-32" data-aos="fade-up" data-aos-anchor="[data-aos-id-blocks]">
-                        <a href="https://www.google.ru/">
+                        <a href="https://www.iek.ru/">
                            <img className=" mb-2" src={LogoIEK} alt="Partner5" />
                         </a>
                      </div>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 import Header from '../partials/Header';
 import PageIllustration from '../partials/PageIllustration';
-import { loginUser } from '../actions';
+import { loginError, loginUser } from '../actions';
 import { AppState } from "../models/IAppState";
 import { LOGIN_ERROR } from "../actions/types";
 
-const SignIn = ({ authError }: { authError: string }) => {
+const SignIn = ({ authError, userLogin }: { authError: string , userLogin: boolean}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -18,41 +18,62 @@ const SignIn = ({ authError }: { authError: string }) => {
         e.preventDefault();
         try {
             console.log('User in form login: ', email, password);
-            const response = await dispatch(loginUser({
+            await dispatch(loginUser({
                 email: email,
                 password: password,
             }));
-            console.log('Login successful', response);
-            // navigate("/")
-        } catch (error:any) {
+            console.log('Login successful');
+            loginError(''); // Очищаем ошибку при успешном входе
+            // const error = useSelector((state) => state.auth.error)
+            console.log('userLogin in handleLogin: ', userLogin)
+            if(authError){
+                alert(authError)
+            }
+            
+        } catch (error: any) {
             console.error("Error in handleLogin:", error);
     
-            if (error.response && error.response.status === 404) {
+            if (error && error.message) {
+                // Обрабатываем ошибку из loginUserWorker
+                loginError(error.message);
+            } else if (error.response && error.response.status === 404) {
                 // Обрабатываем ошибку 404 (пользователь не найден)
-                alert('User not found');
+                loginError('User not found');
             } else {
                 // Обработка других ошибок
-                throw error;
+                loginError('An error occurred'); // Здесь вы можете указать своё сообщение
+                // throw error;
             }
         }
     };
     
 
     useEffect(() => {
-            // Cleanup function on component unmount
+        // Cleanup function on component unmount
         return () => {
-            dispatch({ type: LOGIN_ERROR, payload: null });
+           loginError(''); // Очищаем ошибку при размонтировании компонента
         };
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
-        //console.log('Auth error from redux state:', authError);
-        // if (authError) {
-        //     console.log(authError);
-        //     alert(authError);
-        // }
-    }, [authError]);
-      
+        console.log('Auth error from redux state:', authError);
+        if (authError) {
+            console.log('Auth error from redux state in SignIn:', authError);
+            alert(authError);
+        }
+    
+        console.log('userLogin from redux state:', userLogin);
+        if (userLogin) {
+            console.log('userLogin from redux state in SignIn:', userLogin);
+            alert(userLogin);
+        }
+    
+        // Если нет ошибок и пользователь залогинен, перенаправляем на главную страницу
+        if (!authError && userLogin) {
+            navigate("/");
+        }
+    }, [authError, userLogin]);
+    
     
 
     return (
@@ -80,7 +101,7 @@ const SignIn = ({ authError }: { authError: string }) => {
 
                             {/* Form */}
                             <div className="max-w-sm mx-auto">
-                                <form>
+                                {/* <form>
                                     <div className="flex flex-wrap -mx-3">
                                         <div className="w-full px-3">
                                             <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center">
@@ -92,12 +113,13 @@ const SignIn = ({ authError }: { authError: string }) => {
                                             </button>
                                         </div>
                                     </div>
-                                </form>
+                                </form> */}
                                 <div className="flex items-center my-6">
                                     <div className="border-t border-gray-700 border-dotted grow mr-3" aria-hidden="true"></div>
                                     <div className="text-gray-400">Или войдите с помощью Вашего email</div>
                                     <div className="border-t border-gray-700 border-dotted grow ml-3" aria-hidden="true"></div>
                                 </div>
+
                                 <form>
                                     <div className="flex flex-wrap -mx-3 mb-4">
                                         <div className="w-full px-3">
@@ -167,6 +189,12 @@ const SignIn = ({ authError }: { authError: string }) => {
 
 const mapStateToProps = (state: AppState) => ({
     authError: state.auth.error,
+    userLogin: state.auth.isAuth
 });
+
+const mapDispatchToProps = {
+    loginUser,
+    loginError,
+};
 
 export default connect(mapStateToProps)(SignIn);

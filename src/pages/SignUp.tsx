@@ -73,7 +73,7 @@ const SignUp = (props: any) => {
 
               {/* Form */}
               <div className="max-w-sm mx-auto">
-                <form>
+                {/* <form>
                   <div className="flex flex-wrap -mx-3">
                     <div className="w-full px-3">
                       <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center">
@@ -85,7 +85,7 @@ const SignUp = (props: any) => {
                       </button>
                     </div>
                   </div>
-                </form>
+                </form> */}
                 <div className="flex items-center my-6">
                   <div className="border-t border-gray-700 border-dotted grow mr-3" aria-hidden="true"></div>
                   <div className="text-gray-400">Зарегистрируйтесь с помощью Вашего email</div>
